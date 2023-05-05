@@ -1,0 +1,94 @@
+clase Customer {
+   id
+   name
+   email
+   phone
+   preferences
+}
+
+clase Flight {
+   id
+   name
+   origin
+   destination
+   price
+}
+
+clase Booking {
+   id
+   customer
+   flight
+   date
+   price
+}
+
+clase Preferences {
+   id
+   customer
+   destination
+   preferences
+}
+
+funcion hacer_solicitud(customer, preferences) {
+   opciones_de_flight = obtener_opciones_de_flight()
+   mostrar_opciones(opciones_de_flight)
+   flight_elegido = customer.eligir_opcion(opciones_de_flight)
+   customer.guardar_informacion()
+   si preferences != null entonces
+      personalizar_flight(flight_elegido, preferences)
+   fin si
+   booking = booking(customer, flight_elegido)
+   booking.guardar_informacion()
+   confirmar_booking(booking)
+   hacer_pago(booking)
+}   
+
+funcion obtener_opciones_de_flight() {
+   opciones = []
+   para cada flight en la lista_de_flights hacer
+      opciones.agregar(flight)
+   fin para
+   devolver opciones
+}
+
+funcion mostrar_opciones(opciones_de_flight) {
+   imprimir("Estas son las opciones de flight disponibles:")
+   para cada flight en opciones_de_flight hacer
+      imprimir(flight.name + " de " + flight.origin + " a " + flight.destination + " por " + flight.price + " dólares")
+   fin para
+}
+
+funcion personalizar_flight(flight_elegido, preferences) {
+   si preferences.destination == flight_elegido.destination entonces
+      flight_elegido.price = flight_elegido.price - 50
+   fin si
+   para cada preferencia en preferences.preferences hacer
+      si preferencia == "asiento de ventana" entonces
+         flight_elegido.asignar_asiento_de_ventana()
+      fin si
+   fin para
+}
+
+funcion confirmar_booking(booking) {
+   imprimir("La booking para " + booking.customer.name + " en el flight " + booking.flight.name + " se ha realizado con éxito.")
+   enviar_notificacion(booking.customer, "Su booking para el flight " + booking.flight.name + " se ha realizado con éxito.")
+}
+
+funcion hacer_pago(booking) {
+   price = booking.price
+   hacer_cargo(price)
+   imprimir("Se ha realizado el pago de " + price + " dólares.")
+}
+
+funcion enviar_notificacion(customer, mensaje) {
+   enviar_email(customer.email, mensaje)
+   enviar_sms(customer.phone, mensaje)
+}
+
+En este pseudocódigo se puede ver que la aplicación recibe la solicitud del cliente (customer) y muestra 
+las opciones de vuelo (flight) disponibles. Luego, el cliente elige una opción y proporciona su información personal.
+La aplicación guarda la información del cliente y verifica si el cliente tiene preferencias (preferences). Si el cliente 
+tiene preferencias, la aplicación personaliza el vuelo de acuerdo a estas preferencias. La aplicación guarda la 
+información de la reserva (booking) del cliente y confirma la reserva al cliente. También permite al cliente hacer una 
+compra del vuelo mediante un proceso de pago en línea. La aplicación también puede enviar una notificación por 
+email o SMS para confirmar la reserva al cliente.
